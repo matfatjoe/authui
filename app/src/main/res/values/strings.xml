@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FirebaseUIAuth</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_not_completed"></string>
+    <string name="login_needed"></string>
+    <string name="facebook_app_id">977331855802056</string>
+    <string name="facebook_application_id">977331855802056</string>
+    <string name="fb_login_protocol_scheme">fb977331855802056</string>
+
+</resources>
