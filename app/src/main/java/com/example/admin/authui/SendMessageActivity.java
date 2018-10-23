@@ -1,8 +1,8 @@
 package com.example.admin.authui;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,11 +23,10 @@ public class SendMessageActivity extends AppCompatActivity {
     private EditText mensagem;
     private Button mandar;
 
-    private Bundle params;
-
     private DatabaseReference mDatabase;
     private FirebaseUser user;
     private CheckBox isImportant;
+    private Bundle params;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,50 +39,54 @@ public class SendMessageActivity extends AppCompatActivity {
 
         mensagem = (EditText) findViewById(R.id.mensagem);
         mandar = (Button) findViewById(R.id.mandar);
+        params = getIntent().getExtras();
 
+        if(params != null){
+            String key = params.getString("uid");
+            if(key != null) {
+                DatabaseReference Ref = mDatabase.child("chat").child(key);
+                Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Chat ch = dataSnapshot.getValue(Chat.class);
+                        mensagem.setText(ch.getMessage());
+                        isImportant.setChecked(ch.isImportant());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
         mandar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mensagem = recuperarCampo();
-                sendMessage(mensagem);
+                sendMessage();
             }
         });
-
-        if (params != null) {
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference message = mDatabase.child("chat").child(params.getString("key"));
-            ValueEventListener messageListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Recupera os dados da mensagem para atualizar a tela
-                    Chat message = dataSnapshot.getValue(Chat.class);
-                    EditText editTextMessage = findViewById(R.id.mensagem);
-                    editTextMessage.setHint(message.getMessage());
-                    CheckBox checkBox = findViewById(R.id.isImportant);
-                    checkBox.setChecked(message.isImportant());
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Não conseguiu obter os dados da mensage
-                    Log.w("TASK", "loadMessage:onCancelled",
-                            databaseError.toException());
-                }
-            };
-            message.addValueEventListener(messageListener);
-            recuperarCampo();
-            sendMessage();
-        }
     }
 
-    private String recuperarCampo() {
-        return mensagem.getText().toString();
-    }
-
-    private void sendMessage(String message) {
-        String key = mDatabase.child("chat").push().getKey();
+    private void sendMessage() {
+        String message = mensagem.getText().toString();
         boolean importante = isImportant.isChecked();
-        Chat chatMessage = new Chat(key, user.getDisplayName(), message, importante, user.getUid());
-        mDatabase.child("chat").child(key).setValue(chatMessage);
+
+        if(params != null){
+            String keyEdit = params.getString("uid");
+            if(keyEdit != null) {
+                Chat chatMessage = new Chat(keyEdit, user.getDisplayName(), message, importante, user.getUid());
+                mDatabase.child("chat").child(keyEdit).setValue(chatMessage);
+            } else {
+                String key = mDatabase.child("chat").push().getKey();
+                Chat chatMessage = new Chat(key, user.getDisplayName(), message, importante, user.getUid());
+                mDatabase.child("chat").child(key).setValue(chatMessage);
+            }
+        } else {
+            String key = mDatabase.child("chat").push().getKey();
+            Chat chatMessage = new Chat(key, user.getDisplayName(), message, importante, user.getUid());
+            mDatabase.child("chat").child(key).setValue(chatMessage);
+        }
         finish();
     }
 

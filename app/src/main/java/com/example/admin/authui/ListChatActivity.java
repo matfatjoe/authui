@@ -1,10 +1,13 @@
 package com.example.admin.authui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,7 +82,6 @@ public class ListChatActivity extends AppCompatActivity {
 
                 nome.setText(model.getName());
                 mensagem.setText(model.getMessage());
-
             }
         };
 
@@ -94,16 +96,22 @@ public class ListChatActivity extends AppCompatActivity {
             }
         };
 
-        listViewChatUser.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+        listViewChat.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
                 contextMenu.add(Menu.NONE, 1, Menu.NONE, "Editar");
-                contextMenu.add(Menu.NONE, 2, Menu.NONE, "Excluir");
+                contextMenu.add(Menu.NONE, 2, Menu.NONE, "Deletar");
             }
         });
-
-        listViewChatUser.setAdapter(adapter1);
         listViewChat.setAdapter(adapter);
+        listViewChatUser.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                contextMenu.add(Menu.NONE, 3, Menu.NONE, "Editar");
+                contextMenu.add(Menu.NONE, 4, Menu.NONE, "Deletar");
+            }
+        });
+        listViewChatUser.setAdapter(adapter1);
     }
     private void voltarMain(){
         Intent voltar = new Intent(this, MainActivity.class);
@@ -132,25 +140,86 @@ public class ListChatActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
         AdapterView.AdapterContextMenuInfo menuInfo =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        int posittion = menuInfo.position;
-
+        int position = menuInfo.position;
         switch (item.getItemId()) {
             case 1:
-                editar(posittion);
+                editar(position);
+            break;
+            case 2:
+                remover(position);
+            break;
+            case 3:
+                editarUser(position);
+            break;
+            case 4:
+                removerUser(position);
+            break;
         }
         return super.onContextItemSelected(item);
     }
 
-    private void editar(int position) {
-        DatabaseReference itemRef = adapter1.getRef(position);
+    public void remover(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Deseja remover o item");
+        //define um botão como positivo
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Chat ch = adapter.getItem(position);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                ref.child("chat").child(ch.getUid()).removeValue();
+                Toast.makeText(getApplicationContext(), "Mensagem removida", Toast.LENGTH_LONG).show();
+            }
+        });
+        //define um botão como negativo.
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
 
-        Intent edit = new Intent(this, SendMessageActivity.class);
+            }
+        });
 
-        Toast toast = Toast.makeText(this, itemRef.getKey(), Toast.LENGTH_SHORT);
-        toast.show();
+        builder.create().show();
+
+    }
+
+     public void removerUser(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Deseja remover o item");
+        //define um botão como positivo
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Chat ch = adapter1.getItem(position);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                ref.child("chat").child(ch.getUid()).removeValue();
+                Toast.makeText(getApplicationContext(), "Mensagem removida", Toast.LENGTH_LONG).show();
+            }
+        });
+        //define um botão como negativo.
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+
+            }
+        });
+
+        builder.create().show();
+
+    }
+    public void editar(int position){
+        Chat ch = adapter.getItem(position);
+
+        Log.w("uid", ch.getUid());
+        Intent atualizarMsg = new Intent(this, SendMessageActivity.class);
+        atualizarMsg.putExtra("uid", ch.getUid());
+        startActivity(atualizarMsg);
+    }
+
+    public void editarUser(int position){
+        Chat ch = adapter1.getItem(position);
+
+        Log.w("uid", ch.getUid());
+        Intent atualizarMsg = new Intent(this, SendMessageActivity.class);
+        atualizarMsg.putExtra("uid", ch.getUid());
+        startActivity(atualizarMsg);
     }
 }
