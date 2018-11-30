@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/materiaTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="1dp"
+        android:text="Matéria :"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/dataTxt" />
+
+    <TextView
+        android:id="@+id/dataTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:text="Data :"
+        app:layout_constraintBottom_toTopOf="@+id/materiaTxt"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/nomeTxt" />
+
+    <TextView
+        android:id="@+id/nomeTV"
+        android:layout_width="274dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="21dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/materiaTxt"
+        app:layout_constraintStart_toEndOf="@+id/nomeTxt"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/materiaTV"
+        android:layout_width="280dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintBottom_toTopOf="@+id/dataTV"
+        app:layout_constraintStart_toEndOf="@+id/dataTxt"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dataTV"
+        android:layout_width="273dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/materiaTxt"
+        app:layout_constraintTop_toBottomOf="@+id/materiaTV" />
+
+    <TextView
+        android:id="@+id/nomeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="3dp"
+        android:text="Nome :"
+        app:layout_constraintBottom_toTopOf="@+id/dataTxt"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="65dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/materiaTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ico_owner" />
+
+</android.support.constraint.ConstraintLayout>

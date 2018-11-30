@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin.authui">
+    package="com.android.projetoagenda">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -8,9 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name="com.example.admin.authui.MainActivity"
+            android:name="com.android.projetoagenda.login.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,31 +21,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.android.projetoagenda.cadastro.CadastroAtividade" />
         <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:name="com.android.projetoagenda.activity.MinhasAtividades"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.android.projetoagenda.login.LoginActivity"/>
         <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.example.admin.authui.ListChatActivity"
-            android:label="ListChatActivity"
+            android:name="com.android.projetoagenda.editar.EditarAtividade"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.example.admin.authui.SendMessageActivity"></activity>
+        <activity
+            android:name="com.android.projetoagenda.activity.AtividadesConvidado"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.android.projetoagenda.login.LoginActivity"></activity>
+        <activity android:name="com.android.projetoagenda.editar.EditarAtividadeConvidado"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name="com.android.projetoagenda.activity.Atividades"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.android.projetoagenda.login.LoginActivity"></activity>
     </application>
-
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
 
 </manifest>
